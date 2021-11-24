@@ -1,16 +1,33 @@
 const express = require("express");
 const router = express.Router();
 
+// controllers
 const { login, register } = require("../controller/auth");
-const { getSearch, getProfile } = require("../controller/literature");
+const {
+  getSearch,
+  getLiteraturesProfile,
+  addLiterature,
+} = require("../controller/literature");
+const { getMyCollections } = require("../controller/collection");
 
-const { auth } = require("../../middlewares/auth");
+// middlewares
+const { auth } = require("../middlewares/auth");
+const { uploadFile } = require("../middlewares/uploadFile");
 
 // router literature
 router.get("/literatures", auth, getSearch);
+router.get("/profile/:id/literatures", auth, getLiteraturesProfile);
+router.post(
+  "/literatures",
+  auth,
+  uploadFile("attache", "uploads/literatures"),
+  addLiterature
+);
+
+// router collection
+router.get("/collections/:id", auth, getMyCollections);
 
 // router user
-router.get("/profile/:id/literature", auth, getProfile);
 
 // router auth
 router.post("/login", login);
