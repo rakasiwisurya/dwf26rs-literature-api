@@ -1,8 +1,16 @@
 const { literature, user } = require("../../models");
 
-exports.getLiteratures = async (req, res) => {
+exports.getSearch = async (req, res) => {
+  const titleQuery = req.query.title;
+  const { Op } = require("sequelize");
+
   try {
     let data = await literature.findAll({
+      where: {
+        title: {
+          [Op.substring]: titleQuery,
+        },
+      },
       include: {
         model: user,
         as: "user",

@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const { login, register } = require("../controller/auth");
-const { getLiteratures } = require("../controller/literature");
+const { getSearch } = require("../controller/literature");
 
 const { auth } = require("../../middlewares/auth");
 
 // router literature
-router.get("/literatures", auth, getLiteratures);
+router.get("/literatures", auth, getSearch);
 
 // router auth
 router.post("/login", login);
