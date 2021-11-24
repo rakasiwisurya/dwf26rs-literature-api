@@ -22,6 +22,9 @@ module.exports = {
         phone: "085717573808",
         address: "Jl. Kenangan No. 1",
         avatar: null,
+        role: "admin",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "user1@gmail.com",
@@ -32,6 +35,9 @@ module.exports = {
         phone: "085717573808",
         address: "Jl. Melati No. 1",
         avatar: null,
+        role: "user",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
   },
