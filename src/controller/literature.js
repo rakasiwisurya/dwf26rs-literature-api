@@ -1,0 +1,42 @@
+const { literature, user } = require("../../models");
+
+exports.getLiteratures = async (req, res) => {
+  try {
+    let data = await literature.findAll({
+      include: {
+        model: user,
+        as: "user",
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "userId"],
+      },
+    });
+
+    data = JSON.parse(JSON.stringify(data));
+
+    const newData = data.map((item) => ({
+      id: item.id,
+      title: item.title,
+      publication_date: item.publication_date,
+      pages: item.pages,
+      isbn: item.isbn,
+      author: item.author,
+      attache: process.env.PATH_LITERATURE_FILES + item.attache,
+      user: item.user,
+    }));
+
+    res.send({
+      status: "Success",
+      data: newData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "failed",
+      message: "Server error",
+    });
+  }
+};
