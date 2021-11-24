@@ -4,6 +4,75 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+exports.register = async (req, res) => {
+  const schema = Joi.object({
+    email: Joi.string().email().min(10).required(),
+    password: Joi.string().min(5).required(),
+    fullname: Joi.string().min(5).required(),
+    phone: Joi.number().min(10).required(),
+    address: Joi.string().min(10).required(),
+    gender: Joi.string().min(4).required(),
+  });
+
+  const { error } = schema.validate(req.body);
+
+  if (error) {
+    return res.status(400).send({
+      status: "Failed",
+      message: error.details[0].message,
+    });
+  }
+
+  try {
+    const userData = await user.findOne({
+      where: {
+        email: req.body.email,
+      },
+    });
+
+    console.log(userData);
+
+    if (userData) {
+      return res.status(400).send({
+        status: "Failed",
+        message: "User already exist",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    const newUser = await user.create({
+      ...req.body,
+      password: hashedPassword,
+      avatar: null,
+      role: "user",
+    });
+
+    const token = jwt.sign(
+      { id: newUser.id, role: newUser.role },
+      process.env.TOKEN_KEY
+    );
+
+    res.send({
+      status: "Success",
+      message: "Your account has successfully created",
+      data: {
+        email: newUser.email,
+        fullname: newUser.fullname,
+        token,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};
+
 exports.login = async (req, res) => {
   const schema = Joi.object({
     email: Joi.string().email().required(),
@@ -72,14 +141,14 @@ exports.login = async (req, res) => {
 
     res.send({
       status: "Success",
-      message: "Login Successful",
+      message: "Login successful",
       data: newUserData,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       status: "Failed",
-      message: "Server Error",
+      message: "Server error",
     });
   }
 };
