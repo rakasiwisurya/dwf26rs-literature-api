@@ -39,6 +39,19 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        email: "user2@gmail.com",
+        password:
+          "$2a$10$/DAeUmDBtraAci5tg5Y.AOifekzKfkowhqn7WxBITLWUkP0OxSBxK", //12345
+        fullname: "User2",
+        gender: "male",
+        phone: "085717573808",
+        address: "Jl. Melati No. 2",
+        avatar: null,
+        role: "user",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

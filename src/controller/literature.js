@@ -43,7 +43,40 @@ exports.getSearch = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send({
-      status: "failed",
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};
+
+exports.getProfile = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await literature.findAll({
+      where: {
+        userId: id,
+      },
+      include: {
+        model: user,
+        as: "user",
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "userId"],
+      },
+    });
+
+    res.send({
+      status: "Success",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
       message: "Server error",
     });
   }

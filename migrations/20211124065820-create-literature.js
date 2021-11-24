@@ -9,34 +9,35 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       title: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: {
-          model: "users",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
       },
       publication_date: {
+        allowNull: false,
         type: Sequelize.DATEONLY,
       },
       pages: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       isbn: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       author: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       attache: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       status: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       createdAt: {
