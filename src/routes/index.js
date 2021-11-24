@@ -29,8 +29,6 @@ router.get("/literatures/:id", auth, getLiterature);
 // router collection
 router.get("/collections/:id", auth, getMyCollections);
 
-// router user
-
 // router auth
 router.post("/login", login);
 router.post("/register", register);
