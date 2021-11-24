@@ -200,3 +200,41 @@ exports.getLiterature = async (req, res) => {
     });
   }
 };
+
+exports.getLiteratures = async (req, res) => {
+  try {
+    let data = await literature.findAll({
+      include: {
+        model: user,
+        as: "user",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "password"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    data = JSON.parse(JSON.stringify(data));
+
+    const newData = data.map((item) => ({
+      ...item,
+      attache: {
+        filename: item.attache,
+        url: process.env.PATH_LITERATURE_FILES + item.attache,
+      },
+    }));
+
+    res.send({
+      status: "Success",
+      data: newData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};

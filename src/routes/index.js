@@ -8,15 +8,16 @@ const {
   getLiteraturesProfile,
   addLiterature,
   getLiterature,
+  getLiteratures,
 } = require("../controller/literature");
 const { getMyCollections } = require("../controller/collection");
 
 // middlewares
-const { auth } = require("../middlewares/auth");
+const { auth, adminOnly } = require("../middlewares/auth");
 const { uploadFile } = require("../middlewares/uploadFile");
 
 // router literature
-router.get("/literatures", auth, getSearch);
+router.get("/literature", auth, getSearch);
 router.get("/profile/:id/literatures", auth, getLiteraturesProfile);
 router.post(
   "/literatures",
@@ -25,6 +26,7 @@ router.post(
   addLiterature
 );
 router.get("/literatures/:id", auth, getLiterature);
+router.get("/literatures", auth, adminOnly, getLiteratures);
 
 // router collection
 router.get("/collections/:id", auth, getMyCollections);
