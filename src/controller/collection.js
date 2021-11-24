@@ -10,7 +10,7 @@ exports.getMyCollections = async (req, res) => {
       },
       include: {
         model: user,
-        as: "user",
+        as: "userCollection",
         through: {
           model: collection,
           as: "bridge",

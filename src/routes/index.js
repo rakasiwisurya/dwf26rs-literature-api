@@ -11,19 +11,19 @@ const {
   getLiteratures,
 } = require("../controller/literature");
 const { getMyCollections } = require("../controller/collection");
-const { getUser } = require("../controller/user");
+const { getUser, updateUserAvatar } = require("../controller/user");
 
 // middlewares
 const { auth, adminOnly } = require("../middlewares/auth");
-const { uploadPdf } = require("../middlewares/uploadFile");
+const { uploadPdf, uploadImage } = require("../middlewares/uploadFile");
 
 // router literature
 router.get("/literature", auth, getSearch);
 router.get("/profile/:id/literatures", auth, getLiteraturesProfile);
 router.post(
   "/literatures",
-  auth,
   uploadPdf("attache", "uploads/literatures"),
+  auth,
   addLiterature
 );
 router.get("/literatures/:id", auth, getLiterature);
@@ -34,6 +34,12 @@ router.get("/collections/:id", auth, getMyCollections);
 
 // router user
 router.get("/users/:id", auth, getUser);
+router.put(
+  "/users/:id",
+  uploadImage("avatar", "uploads/avatars"),
+  auth,
+  updateUserAvatar
+);
 
 // router auth
 router.post("/login", login);
