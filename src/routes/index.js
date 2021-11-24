@@ -7,6 +7,7 @@ const {
   getSearch,
   getLiteraturesProfile,
   addLiterature,
+  getLiterature,
 } = require("../controller/literature");
 const { getMyCollections } = require("../controller/collection");
 
@@ -23,6 +24,7 @@ router.post(
   uploadFile("attache", "uploads/literatures"),
   addLiterature
 );
+router.get("/literatures/:id", auth, getLiterature);
 
 // router collection
 router.get("/collections/:id", auth, getMyCollections);

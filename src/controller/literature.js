@@ -55,7 +55,7 @@ exports.getLiteraturesProfile = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const data = await literature.findAll({
+    let data = await literature.findAll({
       where: {
         userId: id,
       },
@@ -71,9 +71,22 @@ exports.getLiteraturesProfile = async (req, res) => {
       },
     });
 
+    data = JSON.parse(JSON.stringify(data));
+
+    const newData = data.map((item) => ({
+      id: item.id,
+      title: item.title,
+      publication_date: item.publication_date,
+      pages: item.pages,
+      isbn: item.isbn,
+      author: item.author,
+      attache: process.env.PATH_LITERATURE_FILES + item.attache,
+      user: item.user,
+    }));
+
     res.send({
       status: "Success",
-      data,
+      data: newData,
     });
   } catch (error) {
     console.log(error);
@@ -111,7 +124,7 @@ exports.addLiterature = async (req, res) => {
       status: "Waiting Approve",
     });
 
-    const data = await literature.findOne({
+    let data = await literature.findOne({
       where: {
         id: newLiterature.id,
       },
@@ -126,10 +139,58 @@ exports.addLiterature = async (req, res) => {
         exclude: ["createdAt", "updatedAt", "userId"],
       },
     });
+
+    data = JSON.parse(JSON.stringify(data));
+
+    const newData = {
+      ...data,
+      attache: process.env.PATH_LITERATURE_FILES + data.attache,
+    };
+
     res.send({
       status: "Success",
       message: "Literature has successfully added",
-      data,
+      data: newData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};
+
+exports.getLiterature = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    let data = await literature.findOne({
+      where: {
+        id,
+      },
+      include: {
+        model: user,
+        as: "user",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "password"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    data = JSON.parse(JSON.stringify(data));
+
+    const newData = {
+      ...data,
+      attache: process.env.PATH_LITERATURE_FILES + data.attache,
+    };
+
+    res.send({
+      status: "Success",
+      data: newData,
     });
   } catch (error) {
     console.log(error);
