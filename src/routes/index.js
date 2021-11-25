@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // controllers
-const { login, register } = require("../controller/auth");
+const { login, register, checkAuth } = require("../controller/auth");
 const {
   getSearch,
   getLiteraturesProfile,
@@ -44,5 +44,6 @@ router.put(
 // router auth
 router.post("/login", login);
 router.post("/register", register);
+router.get("/check-auth", auth, checkAuth);
 
 module.exports = router;

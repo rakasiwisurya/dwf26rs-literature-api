@@ -152,3 +152,54 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+exports.checkAuth = async (req, res) => {
+  try {
+    const id = req.user.id;
+
+    let userData = await user.findOne({
+      where: {
+        id,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "password"],
+      },
+    });
+
+    if (!userData) {
+      return res.status(404).send({
+        status: "failed",
+      });
+    }
+
+    userData = JSON.parse(JSON.stringify(userData));
+
+    const avatar = userData.avatar
+      ? process.env.PATH_AVATAR_IMAGES + userData.avatar
+      : process.env.PATH_AVATAR_IMAGES + "no-photo.jpg";
+
+    const newUserData = {
+      id: userData.id,
+      fullname: userData.fullname,
+      email: userData.email,
+      gender: userData.gender,
+      phone: userData.phone,
+      address: userData.address,
+      role: userData.role,
+      avatar: avatar,
+    };
+
+    res.send({
+      status: "Success",
+      data: {
+        user: newUserData,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};
