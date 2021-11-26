@@ -14,17 +14,6 @@ module.exports = (sequelize, DataTypes) => {
           name: "userId",
         },
       });
-
-      literature.belongsToMany(models.user, {
-        as: "userCollection",
-        through: {
-          model: "collections",
-          as: "bridge",
-        },
-        foreignKey: {
-          name: "literatureId",
-        },
-      });
     }
   }
   literature.init(

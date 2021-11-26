@@ -4,30 +4,47 @@ exports.getMyCollections = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const data = await literature.findAll({
+    let data = await collection.findAll({
       where: {
         userId: id,
       },
-      include: {
-        model: user,
-        as: "userCollection",
-        through: {
-          model: collection,
-          as: "bridge",
-          attributes: [],
+      include: [
+        {
+          model: literature,
+          as: "literature",
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
+          },
         },
-        attributes: {
-          exclude: ["createdAt", "updatedAt", "password"],
+        {
+          model: user,
+          as: "user",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "password"],
+          },
         },
-      },
+      ],
       attributes: {
-        exclude: ["createdAt", "updatedAt", "userId"],
+        exclude: ["createdAt", "updatedAt", "userId", "literatureId"],
       },
     });
 
+    data = JSON.parse(JSON.stringify(data));
+
+    const newData = data.map((item) => ({
+      literature: {
+        ...item.literature,
+        attache: process.env.PATH_LITERATURE_FILES + item.literature.attache,
+      },
+      user: {
+        ...item.user,
+        avatar: process.env.PATH_AVATAR_IMAGES + item.user.avatar,
+      },
+    }));
+
     res.send({
       status: "Success",
-      data,
+      data: newData,
     });
   } catch (error) {
     console.log(error);
