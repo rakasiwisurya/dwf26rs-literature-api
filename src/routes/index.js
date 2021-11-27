@@ -11,7 +11,11 @@ const {
   getLiteratures,
   updateStatusLiterature,
 } = require("../controller/literature");
-const { getMyCollections } = require("../controller/collection");
+const {
+  getMyCollections,
+  addMyCollection,
+  deleteMyCollection,
+} = require("../controller/collection");
 const { getUser, updateUserAvatar } = require("../controller/user");
 
 // middlewares
@@ -33,6 +37,8 @@ router.put("/literatures/:id", auth, adminOnly, updateStatusLiterature);
 
 // router collection
 router.get("/collections/:id", auth, getMyCollections);
+router.post("/collections", auth, addMyCollection);
+router.delete("/collections/:id", auth, deleteMyCollection);
 
 // router user
 router.get("/users/:id", auth, getUser);
