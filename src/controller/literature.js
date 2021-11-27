@@ -212,7 +212,7 @@ exports.getLiteratures = async (req, res) => {
         },
       },
       attributes: {
-        exclude: ["createdAt", "updatedAt"],
+        exclude: ["createdAt", "updatedAt", "userId"],
       },
     });
 
@@ -228,6 +228,53 @@ exports.getLiteratures = async (req, res) => {
 
     res.send({
       status: "Success",
+      data: newData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};
+
+exports.updateStatusLiterature = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await literature.update(req.body, {
+      where: {
+        id,
+      },
+    });
+
+    let data = await literature.findOne({
+      where: {
+        id,
+      },
+      include: {
+        model: user,
+        as: "user",
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "password"],
+        },
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "userId"],
+      },
+    });
+
+    data = JSON.parse(JSON.stringify(data));
+
+    const newData = {
+      ...data,
+      attache: process.env.PATH_LITERATURE_FILES + data.attache,
+    };
+
+    res.send({
+      status: "Success",
+      message: "Literature status has been updated",
       data: newData,
     });
   } catch (error) {

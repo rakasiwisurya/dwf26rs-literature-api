@@ -9,6 +9,7 @@ const {
   addLiterature,
   getLiterature,
   getLiteratures,
+  updateStatusLiterature,
 } = require("../controller/literature");
 const { getMyCollections } = require("../controller/collection");
 const { getUser, updateUserAvatar } = require("../controller/user");
@@ -28,6 +29,7 @@ router.post(
 );
 router.get("/literatures/:id", auth, getLiterature);
 router.get("/literatures", auth, adminOnly, getLiteratures);
+router.put("/literatures/:id", auth, adminOnly, updateStatusLiterature);
 
 // router collection
 router.get("/collections/:id", auth, getMyCollections);
