@@ -1,6 +1,7 @@
 const { literature, user } = require("../../models");
 
 const Joi = require("joi");
+const fs = require("fs");
 
 exports.getSearch = async (req, res) => {
   const titleQuery = req.query.title;
@@ -276,6 +277,44 @@ exports.updateStatusLiterature = async (req, res) => {
       status: "Success",
       message: "Literature status has been updated",
       data: newData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};
+
+exports.deleteLiterature = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await literature.findOne({
+      where: {
+        id,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    if (data.attache) {
+      fs.unlink("uploads/literatures/" + data.attache, (error) => {
+        if (error) throw error;
+      });
+    }
+
+    await literature.destroy({
+      where: {
+        id,
+      },
+    });
+
+    res.send({
+      status: "Success",
+      message: "Literature has been deleted",
     });
   } catch (error) {
     console.log(error);

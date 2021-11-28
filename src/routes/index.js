@@ -10,6 +10,7 @@ const {
   getLiterature,
   getLiteratures,
   updateStatusLiterature,
+  deleteLiterature,
 } = require("../controller/literature");
 const {
   getMyCollections,
@@ -34,6 +35,7 @@ router.post(
 router.get("/literatures/:id", auth, getLiterature);
 router.get("/literatures", auth, adminOnly, getLiteratures);
 router.put("/literatures/:id", auth, adminOnly, updateStatusLiterature);
+router.delete("/literatures/:id", auth, deleteLiterature);
 
 // router collection
 router.get("/collections/:id", auth, getMyCollections);
