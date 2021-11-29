@@ -135,6 +135,7 @@ exports.login = async (req, res) => {
       gender: userData.gender,
       phone: userData.phone,
       address: userData.address,
+      role: userData.role,
       avatar: avatar,
       token,
     };
