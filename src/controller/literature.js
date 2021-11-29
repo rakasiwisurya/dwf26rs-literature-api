@@ -18,7 +18,7 @@ exports.getSearch = async (req, res) => {
         model: user,
         as: "user",
         attributes: {
-          exclude: ["createdAt", "updatedAt"],
+          exclude: ["createdAt", "updatedAt", "password"],
         },
       },
       attributes: {
@@ -29,12 +29,7 @@ exports.getSearch = async (req, res) => {
     data = JSON.parse(JSON.stringify(data));
 
     const newData = data.map((item) => ({
-      id: item.id,
-      title: item.title,
-      publication_date: item.publication_date,
-      pages: item.pages,
-      isbn: item.isbn,
-      author: item.author,
+      ...item,
       attache: process.env.PATH_LITERATURE_FILES + item.attache,
       user: item.user,
     }));
@@ -75,12 +70,7 @@ exports.getLiteraturesProfile = async (req, res) => {
     data = JSON.parse(JSON.stringify(data));
 
     const newData = data.map((item) => ({
-      id: item.id,
-      title: item.title,
-      publication_date: item.publication_date,
-      pages: item.pages,
-      isbn: item.isbn,
-      author: item.author,
+      ...item,
       attache: process.env.PATH_LITERATURE_FILES + item.attache,
       user: item.user,
     }));
