@@ -277,6 +277,66 @@ exports.updateStatusLiterature = async (req, res) => {
   }
 };
 
+exports.updateLiterature = async (req, res) => {
+  const { id } = req.params;
+  let bulkData;
+
+  if (req.file) {
+    bulkData = {
+      ...req.body,
+      attache: req.file.filename,
+    };
+  } else {
+    bulkData = req.body;
+  }
+
+  try {
+    const data = await literature.findOne({
+      where: {
+        id,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    if (req.file) {
+      if (data.attache !== req.file.filename) {
+        fs.unlink("uploads/literatures/" + data.attache, (error) => {
+          if (error) throw error;
+        });
+      }
+    }
+
+    await literature.update(bulkData, {
+      where: {
+        id,
+      },
+    });
+
+    const updatedData = await literature.findOne({
+      where: {
+        id,
+      },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    res.send({
+      status: "Success",
+      message: "Literature has been updated",
+      data: updatedData,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "Failed",
+      message: "Server error",
+    });
+  }
+};
+
 exports.deleteLiterature = async (req, res) => {
   const { id } = req.params;
 

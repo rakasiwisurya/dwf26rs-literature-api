@@ -11,6 +11,7 @@ const {
   getLiteratures,
   updateStatusLiterature,
   deleteLiterature,
+  updateLiterature,
 } = require("../controller/literature");
 const {
   getMyCollections,
@@ -35,6 +36,12 @@ router.post(
 router.get("/literatures/:id", auth, getLiterature);
 router.get("/literatures", auth, adminOnly, getLiteratures);
 router.put("/literatures/:id", auth, adminOnly, updateStatusLiterature);
+router.put(
+  "/literature/:id",
+  auth,
+  uploadPdf("attache", "uploads/literatures"),
+  updateLiterature
+);
 router.delete("/literatures/:id", auth, deleteLiterature);
 
 // router collection
