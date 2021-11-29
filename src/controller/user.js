@@ -2,10 +2,16 @@ const { user } = require("../../models");
 
 const fs = require("fs");
 
-exports.getUser = async (req, res) => {
+exports.updateUserData = async (req, res) => {
   const { id } = req.params;
 
   try {
+    await user.update(req.body, {
+      where: {
+        id,
+      },
+    });
+
     let data = await user.findOne({
       where: {
         id,
@@ -28,6 +34,7 @@ exports.getUser = async (req, res) => {
 
     res.send({
       status: "Success",
+      message: "Data has been changed",
       data: newData,
     });
   } catch (error) {

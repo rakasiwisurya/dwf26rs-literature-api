@@ -17,7 +17,7 @@ const {
   addMyCollection,
   deleteMyCollection,
 } = require("../controller/collection");
-const { getUser, updateUserAvatar } = require("../controller/user");
+const { updateUserData, updateUserAvatar } = require("../controller/user");
 
 // middlewares
 const { auth, adminOnly } = require("../middlewares/auth");
@@ -43,7 +43,7 @@ router.post("/collections", auth, addMyCollection);
 router.delete("/collections/:id", auth, deleteMyCollection);
 
 // router user
-router.get("/users/:id", auth, getUser);
+router.put("/users/:id", auth, updateUserData);
 router.put(
   "/users/:id",
   uploadImage("avatar", "uploads/avatars"),
