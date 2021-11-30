@@ -48,7 +48,7 @@ router.delete("/collections/:id", auth, deleteMyCollection);
 // router user
 router.put("/users/:id", auth, updateUserData);
 router.put(
-  "/users/:id",
+  "/users/avatar/:id",
   uploadImage("avatar", "uploads/avatars"),
   auth,
   updateUserAvatar
