@@ -17,6 +17,7 @@ const {
   getMyCollections,
   addMyCollection,
   deleteMyCollection,
+  getMyCollection,
 } = require("../controller/collection");
 const { updateUserData, updateUserAvatar } = require("../controller/user");
 
@@ -36,16 +37,11 @@ router.post(
 router.get("/literatures/:id", auth, getLiterature);
 router.get("/literatures", auth, adminOnly, getLiteratures);
 router.put("/literatures/:id", auth, adminOnly, updateStatusLiterature);
-router.put(
-  "/literature/:id",
-  auth,
-  uploadPdf("attache", "uploads/literatures"),
-  updateLiterature
-);
 router.delete("/literatures/:id", auth, deleteLiterature);
 
 // router collection
 router.get("/collections/:id", auth, getMyCollections);
+router.get("/collections/literature/:id", auth, getMyCollection);
 router.post("/collections", auth, addMyCollection);
 router.delete("/collections/:id", auth, deleteMyCollection);
 
