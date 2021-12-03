@@ -13,6 +13,7 @@ exports.getSearch = async (req, res) => {
         title: {
           [Op.substring]: titleQuery,
         },
+        status: "Approve",
       },
       include: {
         model: user,
@@ -48,12 +49,10 @@ exports.getSearch = async (req, res) => {
 };
 
 exports.getLiteraturesProfile = async (req, res) => {
-  const { id } = req.params;
-
   try {
     let data = await literature.findAll({
       where: {
-        userId: id,
+        userId: req.user.id,
       },
       include: {
         model: user,
@@ -91,7 +90,6 @@ exports.getLiteraturesProfile = async (req, res) => {
 exports.addLiterature = async (req, res) => {
   const schema = Joi.object({
     title: Joi.string().min(5).required(),
-    userId: Joi.number().required(),
     publication_date: Joi.date().required(),
     pages: Joi.number().required(),
     isbn: Joi.string().min(13).max(13),
@@ -111,6 +109,7 @@ exports.addLiterature = async (req, res) => {
   try {
     const newLiterature = await literature.create({
       ...req.body,
+      userId: req.user.id,
       attache: req.file.filename,
       status: "Waiting Approve",
     });

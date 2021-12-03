@@ -1,7 +1,7 @@
 const { user, literature, collection } = require("../../models");
 
 exports.getMyCollections = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
 
   try {
     let data = await collection.findAll({
@@ -63,6 +63,7 @@ exports.getMyCollection = async (req, res) => {
     let data = await collection.findOne({
       where: {
         literatureId: id,
+        userId: req.user.id,
       },
       include: [
         {
@@ -113,8 +114,13 @@ exports.getMyCollection = async (req, res) => {
 };
 
 exports.addMyCollection = async (req, res) => {
+  const { id } = req.user;
+
   try {
-    const newCollection = await collection.create(req.body);
+    const newCollection = await collection.create({
+      ...req.body,
+      userId: id,
+    });
 
     const data = await collection.findOne({
       where: {

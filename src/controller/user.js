@@ -3,7 +3,7 @@ const { user } = require("../../models");
 const fs = require("fs");
 
 exports.updateUserData = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
 
   try {
     await user.update(req.body, {
@@ -47,7 +47,7 @@ exports.updateUserData = async (req, res) => {
 };
 
 exports.updateUserAvatar = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
 
   const data = { avatar: req.file.filename };
 

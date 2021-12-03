@@ -27,7 +27,7 @@ const { uploadPdf, uploadImage } = require("../middlewares/uploadFile");
 
 // router literature
 router.get("/literature", auth, getSearch);
-router.get("/profile/:id/literatures", auth, getLiteraturesProfile);
+router.get("/profile/literatures", auth, getLiteraturesProfile);
 router.post(
   "/literatures",
   uploadPdf("attache", "uploads/literatures"),
@@ -40,15 +40,15 @@ router.put("/literatures/:id", auth, adminOnly, updateStatusLiterature);
 router.delete("/literatures/:id", auth, deleteLiterature);
 
 // router collection
-router.get("/collections/:id", auth, getMyCollections);
+router.get("/collections", auth, getMyCollections);
 router.get("/collections/literature/:id", auth, getMyCollection);
 router.post("/collections", auth, addMyCollection);
 router.delete("/collections/:id", auth, deleteMyCollection);
 
 // router user
-router.put("/users/:id", auth, updateUserData);
+router.put("/users", auth, updateUserData);
 router.put(
-  "/users/avatar/:id",
+  "/users/avatar",
   uploadImage("avatar", "uploads/avatars"),
   auth,
   updateUserAvatar
