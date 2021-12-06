@@ -11,7 +11,6 @@ const {
   getLiteratures,
   updateStatusLiterature,
   deleteLiterature,
-  updateLiterature,
 } = require("../controller/literature");
 const {
   getMyCollections,
