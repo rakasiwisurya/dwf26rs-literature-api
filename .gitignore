@@ -1,3 +1,4 @@
 node_modules
 .env
 uploads/literatures/*.pdf
+uploads/avatars/*\n!no-photo.jpg
